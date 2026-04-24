@@ -231,23 +231,14 @@ export default function SettingsPage() {
     notifyAt95: true,
     launchAtStartup: false,
   });
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(true);
   const [saved, setSaved] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     document.body.style.cssText = 'background:#18181b;margin:0;overflow:hidden;height:100vh;';
-    // Load real settings from IPC — fall back gracefully if not in Electron
-    const load = async () => {
-      if (typeof window !== 'undefined' && window.electronSettings) {
-        try {
-          const loaded = await window.electronSettings.getSettings();
-          setS(loaded);
-        } catch { /* use defaults */ }
-      }
-      setReady(true);
-    };
-    void load();
+    if (typeof window === 'undefined' || !window.electronSettings) return;
+    window.electronSettings.getSettings().then(setS).catch(() => {});
   }, []);
 
   const update = async (partial: Partial<AppSettings>) => {

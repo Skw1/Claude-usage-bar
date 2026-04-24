@@ -1,5 +1,6 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage, Notification, ipcMain, screen } from 'electron';
 import * as fs from 'fs';
+import * as http from 'http';
 import * as path from 'path';
 import { UsageScraper } from './scraper';
 import { SettingsManager } from './settings-manager';
@@ -7,6 +8,49 @@ import type { UsageData, AppSettings } from '../src/lib/types';
 
 const isDev = !app.isPackaged;
 const WIDGET_W = 260;
+
+// ---------------------------------------------------------------------------
+// Local static file server — used in packaged mode so relative asset paths
+// (e.g. ./_next/...) resolve correctly for both / and /settings/ pages
+// ---------------------------------------------------------------------------
+const MIME: Record<string, string> = {
+  '.html': 'text/html; charset=utf-8',
+  '.js':   'application/javascript',
+  '.css':  'text/css',
+  '.json': 'application/json',
+  '.png':  'image/png',
+  '.jpg':  'image/jpeg',
+  '.svg':  'image/svg+xml',
+  '.ico':  'image/x-icon',
+  '.txt':  'text/plain',
+  '.map':  'application/json',
+};
+
+let staticPort = 0;
+
+function startStaticServer(dir: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const server = http.createServer((req, res) => {
+      let urlPath = (req.url ?? '/').split('?')[0];
+      if (urlPath.endsWith('/')) urlPath += 'index.html';
+      const filePath = path.join(dir, urlPath);
+      try {
+        const content = fs.readFileSync(filePath);
+        const ext = path.extname(filePath);
+        res.writeHead(200, { 'Content-Type': MIME[ext] ?? 'application/octet-stream' });
+        res.end(content);
+      } catch {
+        res.writeHead(404);
+        res.end('Not found');
+      }
+    });
+    server.listen(0, '127.0.0.1', () => {
+      staticPort = (server.address() as { port: number }).port;
+      resolve(staticPort);
+    });
+    server.on('error', reject);
+  });
+}
 const PREFS_FILE = () => path.join(app.getPath('userData'), 'claude-usage-bar-pos.json');
 
 let widget: BrowserWindow | null = null;
@@ -84,7 +128,7 @@ function createWidget(): BrowserWindow {
   if (isDev) {
     win.loadURL('http://localhost:3030');
   } else {
-    win.loadFile(path.join(__dirname, '../../out/index.html'));
+    win.loadURL(`http://127.0.0.1:${staticPort}/`);
   }
 
   return win;
@@ -124,7 +168,7 @@ function openSettings(): void {
   if (isDev) {
     settingsWin.loadURL('http://localhost:3030/settings/');
   } else {
-    settingsWin.loadFile(path.join(__dirname, '../../out/settings/index.html'));
+    settingsWin.loadURL(`http://127.0.0.1:${staticPort}/settings/`);
   }
 
   settingsWin.once('ready-to-show', () => {
@@ -207,6 +251,12 @@ app.whenReady().then(async () => {
   // Hide from macOS dock — we live in the menu bar only
   if (process.platform === 'darwin') {
     app.dock?.hide();
+  }
+
+  // Start local file server for packaged mode (fixes relative chunk paths for /settings/ page)
+  if (!isDev) {
+    const outDir = path.join(__dirname, '../../out');
+    await startStaticServer(outDir);
   }
 
   settings = new SettingsManager();
