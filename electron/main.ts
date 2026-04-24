@@ -6,7 +6,7 @@ import { SettingsManager } from './settings-manager';
 import type { UsageData, AppSettings } from '../src/lib/types';
 
 const isDev = !app.isPackaged;
-const WIDGET_W = 248;
+const WIDGET_W = 260;
 const PREFS_FILE = () => path.join(app.getPath('userData'), 'claude-usage-bar-pos.json');
 
 let widget: BrowserWindow | null = null;
