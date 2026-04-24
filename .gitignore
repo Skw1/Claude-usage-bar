@@ -4,3 +4,6 @@ out/
 release/
 .next/
 *.js.map
+tsconfig.tsbuildinfo
+src/lib/*.js
+src/lib/clawd-*.png

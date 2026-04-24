@@ -17,7 +17,7 @@ jobs:
           - os: windows-latest
             targets: '--win nsis portable'
           - os: ubuntu-latest
-            targets: '--linux AppImage deb'
+            targets: '--linux AppImage deb rpm'
           - os: macos-latest
             targets: '--mac dmg zip'
 
@@ -30,6 +30,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
+
+      - name: Install RPM tools (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install -y rpm
 
       - name: Install dependencies
         run: npm ci
@@ -52,5 +56,6 @@ jobs:
             release/*.zip
             release/*.AppImage
             release/*.deb
+            release/*.rpm
           draft: false
           prerelease: false

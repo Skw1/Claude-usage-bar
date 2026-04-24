@@ -29,7 +29,6 @@
 - **Configurable refresh** - 1, 5, 10, or 30 minute intervals
 - **Launch at startup** - automatic start on login (Windows & macOS)
 - **Draggable & pinnable** - reposition anywhere, always-on-top toggle
-- **Sign in without chat** - auth window closes cleanly before Claude chat opens
 - **Settings panel** - accessible from the widget or tray menu
 - **Cross-platform** - Windows 10/11, macOS 12+, Linux (AppImage / .deb)
 - **Privacy-first** - reads data directly from your claude.ai session, no external servers
@@ -44,11 +43,12 @@ Download the latest release from [GitHub Releases](https://github.com/Skw1/Claud
 
 | Platform | File |
 |----------|------|
-| Windows (installer) | `Claude-Usage-Bar-Setup-1.0.0.exe` |
-| Windows (portable) | `Claude-Usage-Bar-1.0.0.exe` |
-| macOS (Apple Silicon + Intel) | `Claude-Usage-Bar-1.0.0.dmg` |
-| Linux (AppImage) | `Claude-Usage-Bar-1.0.0.AppImage` |
-| Linux (deb) | `claude-usage-bar_1.0.0_amd64.deb` |
+| Windows (installer) | `Claude-Usage-Bar-Setup-1.0.1.exe` |
+| Windows (portable) | `Claude-Usage-Bar-1.0.1.exe` |
+| macOS (Apple Silicon + Intel) | `Claude-Usage-Bar-1.0.1.dmg` |
+| Linux (AppImage) | `Claude-Usage-Bar-1.0.1.AppImage` |
+| Linux (deb - Debian/Ubuntu) | `claude-usage-bar_1.0.1_amd64.deb` |
+| Linux (rpm - Fedora/RHEL) | `claude-usage-bar-1.0.1.x86_64.rpm` |
 
 ### From source
 

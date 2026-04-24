@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MASCOT_B64 } from '@/lib/mascot-b64';
 import type { AppSettings } from '@/lib/types';
 
-const VERSION = '1.0.0';
+const VERSION = '1.0.2';
 
 const INTERVALS = [
   { label: '1 minute',   value: 1  },
