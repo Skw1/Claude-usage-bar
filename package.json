@@ -72,7 +72,7 @@
           ]
         }
       ],
-      "icon": "build/icon.icns",
+      "icon": "build/icon.png",
       "category": "public.app-category.utilities",
       "darkModeSupport": true
     },
@@ -91,7 +91,6 @@
     },
     "dmg": {
       "title": "Claude Usage Bar",
-      "background": "build/dmg-background.png",
       "window": {
         "width": 540,
         "height": 380
