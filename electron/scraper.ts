@@ -57,10 +57,15 @@ const EXTRACTOR_SCRIPT = `
       if (found.length > usedMatches.length) usedMatches = found;
     }
 
-    // If progress bars gave nothing, try inline style width percentages
+    // If progress bars gave nothing, try inline style width percentages on thin elements only
+    // (avoids grabbing full-width layout divs that look like 100% false positives)
     if (barValues.length === 0) {
       const styledEls = [...document.querySelectorAll('[style*="width"]')];
       const widthPcts = styledEls
+        .filter(el => {
+          const h = el.getBoundingClientRect().height;
+          return h > 0 && h <= 20;
+        })
         .map(el => { const m = el.style.width.match(/(\\d+(?:\\.\\d+)?)%/); return m ? parseFloat(m[1]) : null; })
         .filter(v => v !== null && v > 0 && v <= 100);
       if (widthPcts.length > 0) barValues = widthPcts;

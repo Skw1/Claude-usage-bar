@@ -326,8 +326,10 @@ export default function Page() {
 
 function ContextWarning({ pct, reset }: { pct: number; reset: string | null }) {
   const remaining = Math.round(100 - pct);
+  const isMaxed = remaining <= 0;
   const isCritical = remaining <= 5;
   const color = isCritical ? C.red : C.orange;
+  const subtitle = reset ? `Resets ${reset}.` : 'Session limit approaching.';
   return (
     <div style={{
       borderRadius: 8,
@@ -337,10 +339,12 @@ function ContextWarning({ pct, reset }: { pct: number; reset: string | null }) {
       display: 'flex', flexDirection: 'column', gap: 3,
     }}>
       <span style={{ fontSize: 10, fontWeight: 600, color, lineHeight: 1.4 }}>
-        {remaining}% of context remaining until auto-compact.
+        {isMaxed
+          ? 'Session limit reached — auto-compact active.'
+          : `${remaining}% of context remaining until auto-compact.`}
       </span>
       <span style={{ fontSize: 9, color: C.t3, lineHeight: 1.4 }}>
-        {reset ? `Resets ${reset}.` : 'Session limit approaching.'}
+        {subtitle}
       </span>
     </div>
   );
