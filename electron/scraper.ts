@@ -10,7 +10,7 @@ const FETCH_TIMEOUT_MS = 30_000;
 
 // Injected into the hidden claude.ai window to parse usage stats from the DOM
 const EXTRACTOR_SCRIPT = `
-(function extractUsage() {
+(async function extractUsage() {
   try {
     function pct(text) {
       const m = String(text ?? '').match(/(\\d+(?:\\.\\d+)?)%/);
@@ -87,9 +87,19 @@ const EXTRACTOR_SCRIPT = `
     const balanceM = pageText.match(/balance[:\\s]+\\$(\\d+(?:\\.\\d+)?)/i)
                   ?? pageText.match(/\\$(\\d+(?:\\.\\d+)?)\\s+(?:balance|remaining)/i);
 
-    // --- Account email ---
-    const emailM = pageText.match(/[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}/);
-    const accountEmail = emailM ? emailM[0] : null;
+    // --- Account email (via API) ---
+    let accountEmail = null;
+    try {
+      const resp = await fetch('/api/auth/session', { credentials: 'include' });
+      if (resp.ok) {
+        const json = await resp.json();
+        accountEmail = json?.email ?? json?.user?.email ?? null;
+      }
+    } catch (_) {}
+    if (!accountEmail) {
+      const emailM = pageText.match(/[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}/);
+      accountEmail = emailM ? emailM[0] : null;
+    }
 
     // --- Plan name ---
     let planName = null;
