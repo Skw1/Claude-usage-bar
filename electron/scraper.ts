@@ -87,6 +87,17 @@ const EXTRACTOR_SCRIPT = `
     const balanceM = pageText.match(/balance[:\\s]+\\$(\\d+(?:\\.\\d+)?)/i)
                   ?? pageText.match(/\\$(\\d+(?:\\.\\d+)?)\\s+(?:balance|remaining)/i);
 
+    // --- Plan name ---
+    let planName = null;
+    const planPatterns = [
+      /Claude\\s+(Max\\s+\\d+x?|Max|Pro|Team|Enterprise|Free)/i,
+      /(Max\\s+\\d+x?|Max|Pro|Team|Enterprise|Free)\\s+plan/i,
+    ];
+    for (const p of planPatterns) {
+      const m = pageText.match(p);
+      if (m) { planName = m[1].trim(); break; }
+    }
+
     // --- Claude Design — detect by label text proximity ---
     let claudeDesignPct = null;
     let claudeDesignReset = null;
@@ -134,6 +145,7 @@ const EXTRACTOR_SCRIPT = `
       extraSpent:   spentM   ? parseFloat(spentM[1])   : null,
       extraLimit:   limitM   ? money(limitM[0])         : null,
       extraBalance: balanceM ? money(balanceM[0])       : null,
+      planName,
       _debug: { barCount: bars.length, percents, claudeDesignPct, pageLen: pageText.length },
     });
   } catch (e) {
@@ -157,6 +169,7 @@ function emptyData(overrides: Partial<UsageData> = {}): UsageData {
     extraReset: null,
     claudeDesignPercent: null,
     claudeDesignReset: null,
+    planName: null,
     isLoggedIn: true,
     error: null,
     lastUpdated: new Date().toISOString(),
@@ -245,6 +258,7 @@ export class UsageScraper extends EventEmitter {
             extraReset:             parsed.extraReset,
             claudeDesignPercent:    parsed.claudeDesignPercent ?? null,
             claudeDesignReset:      parsed.claudeDesignReset   ?? null,
+            planName:               parsed.planName ?? null,
             isLoggedIn: true,
             error: null,
             lastUpdated: new Date().toISOString(),

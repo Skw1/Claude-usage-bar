@@ -9,6 +9,12 @@ import type { UsageData, AppSettings } from '../src/lib/types';
 const isDev = !app.isPackaged;
 const WIDGET_W = 260;
 
+function preloadPath(file: string): string {
+  if (!app.isPackaged) return path.join(__dirname, file);
+  // Preloads are asarUnpack'd — reference from app.asar.unpacked
+  return path.join(__dirname.replace('app.asar', 'app.asar.unpacked'), file);
+}
+
 // ---------------------------------------------------------------------------
 // Local static file server — used in packaged mode so relative asset paths
 // (e.g. ./_next/...) resolve correctly for both / and /settings/ pages
@@ -110,7 +116,7 @@ function createWidget(): BrowserWindow {
     ...(process.platform === 'linux' ? { type: 'dock' } : {}),
     ...(process.platform === 'win32' ? { roundedCorners: false } : {}), // we handle rounding in CSS
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: preloadPath('preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
@@ -156,7 +162,7 @@ function openSettings(): void {
     show: false,
     backgroundColor: '#18181b',
     webPreferences: {
-      preload: path.join(__dirname, 'settings-preload.js'),
+      preload: preloadPath('settings-preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,

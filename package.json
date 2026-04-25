@@ -39,6 +39,10 @@
     "appId": "com.claude.usage-bar",
     "productName": "Claude Usage Bar",
     "asar": true,
+    "asarUnpack": [
+      "dist/electron/preload.js",
+      "dist/electron/settings-preload.js"
+    ],
     "directories": {
       "buildResources": "build",
       "output": "release"

@@ -175,17 +175,23 @@ export default function Page() {
         WebkitAppRegion: 'drag',
         cursor: 'grab',
       } as React.CSSProperties}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
           <img
             src={MASCOT_B64} alt="Claude"
             style={{ width: 18, height: 18, imageRendering: 'pixelated', borderRadius: 4, flexShrink: 0 }}
           />
-          <span style={{
-            fontSize: 12, fontWeight: 600, color: C.t1,
-            letterSpacing: '-0.02em',
-          }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: C.t1, letterSpacing: '-0.02em' }}>
             Claude Usage
           </span>
+          {data?.planName && (
+            <span style={{
+              fontSize: 9, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase',
+              background: C.accentLo, color: C.accent,
+              borderRadius: 4, padding: '1px 5px', lineHeight: '14px',
+            }}>
+              {data.planName}
+            </span>
+          )}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 1, WebkitAppRegion: 'no-drag' } as React.CSSProperties}>

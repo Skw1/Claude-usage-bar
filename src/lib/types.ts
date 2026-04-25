@@ -12,6 +12,7 @@ export interface UsageData {
   extraReset: string | null;
   claudeDesignPercent: number | null;
   claudeDesignReset: string | null;
+  planName: string | null;
   isLoggedIn: boolean;
   error: string | null;
   lastUpdated: string;
