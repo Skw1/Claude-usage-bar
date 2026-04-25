@@ -1,6 +1,6 @@
 {
   "name": "claude-usage-bar",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A minimal always-on-top desktop widget that monitors Claude AI usage in real time — Windows, macOS, Linux",
   "author": {
     "name": "Skw1",

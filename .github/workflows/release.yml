@@ -19,7 +19,9 @@ jobs:
           - os: ubuntu-latest
             targets: '--linux AppImage deb rpm'
           - os: macos-latest
-            targets: '--mac dmg zip'
+            targets: '--mac dmg zip --arm64'
+          - os: macos-13
+            targets: '--mac dmg zip --x64'
 
     runs-on: ${{ matrix.os }}
 
