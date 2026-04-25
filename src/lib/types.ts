@@ -13,6 +13,7 @@ export interface UsageData {
   claudeDesignPercent: number | null;
   claudeDesignReset: string | null;
   planName: string | null;
+  accountEmail: string | null;
   isLoggedIn: boolean;
   error: string | null;
   lastUpdated: string;
@@ -52,6 +53,7 @@ declare global {
       on: (channel: string, cb: (...args: unknown[]) => void) => () => void;
     };
     electronSettings: {
+      getAccountEmail: () => Promise<string | null>;
       getSettings:  () => Promise<AppSettings>;
       saveSettings: (partial: Partial<AppSettings>) => Promise<AppSettings>;
       close:        () => void;

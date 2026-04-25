@@ -349,6 +349,7 @@ app.whenReady().then(async () => {
   });
 
   // Settings IPC
+  ipcMain.handle('settings:account-email', () => lastData?.accountEmail ?? null);
   ipcMain.handle('settings:get', () => settings.get());
   ipcMain.handle('settings:save', (_e, partial: Partial<AppSettings>) => {
     const saved = settings.save(partial);

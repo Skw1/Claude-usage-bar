@@ -87,6 +87,10 @@ const EXTRACTOR_SCRIPT = `
     const balanceM = pageText.match(/balance[:\\s]+\\$(\\d+(?:\\.\\d+)?)/i)
                   ?? pageText.match(/\\$(\\d+(?:\\.\\d+)?)\\s+(?:balance|remaining)/i);
 
+    // --- Account email ---
+    const emailM = pageText.match(/[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}/);
+    const accountEmail = emailM ? emailM[0] : null;
+
     // --- Plan name ---
     let planName = null;
     const planPatterns = [
@@ -146,6 +150,7 @@ const EXTRACTOR_SCRIPT = `
       extraLimit:   limitM   ? money(limitM[0])         : null,
       extraBalance: balanceM ? money(balanceM[0])       : null,
       planName,
+      accountEmail,
       _debug: { barCount: bars.length, percents, claudeDesignPct, pageLen: pageText.length },
     });
   } catch (e) {
@@ -170,6 +175,7 @@ function emptyData(overrides: Partial<UsageData> = {}): UsageData {
     claudeDesignPercent: null,
     claudeDesignReset: null,
     planName: null,
+    accountEmail: null,
     isLoggedIn: true,
     error: null,
     lastUpdated: new Date().toISOString(),
@@ -259,6 +265,7 @@ export class UsageScraper extends EventEmitter {
             claudeDesignPercent:    parsed.claudeDesignPercent ?? null,
             claudeDesignReset:      parsed.claudeDesignReset   ?? null,
             planName:               parsed.planName ?? null,
+            accountEmail:           parsed.accountEmail ?? null,
             isLoggedIn: true,
             error: null,
             lastUpdated: new Date().toISOString(),

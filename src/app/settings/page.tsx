@@ -171,8 +171,24 @@ function TabNotifications({ s, update }: { s: AppSettings; update: (p: Partial<A
 }
 
 function TabAccount() {
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    window.electronSettings?.getAccountEmail().then(setEmail).catch(() => {});
+  }, []);
+
   return (
     <div>
+      <Group title="Account">
+        <Row label="Email" sublabel="Signed-in Claude account" last>
+          <span style={{
+            fontSize: 12, color: '#a1a1aa', fontVariantNumeric: 'tabular-nums',
+            maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {email ?? '—'}
+          </span>
+        </Row>
+      </Group>
       <Group title="Session">
         <Row label="Sign out" sublabel="Clear your session and disconnect" last>
           <button
