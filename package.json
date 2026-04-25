@@ -3,7 +3,8 @@
   "version": "1.0.10",
   "description": "A minimal always-on-top desktop widget that monitors Claude AI usage in real time — Windows, macOS, Linux",
   "author": {
-    "name": "Skw1"
+    "name": "Skw1",
+    "email": "ilak31470@gmail.com"
   },
   "main": "dist/electron/main.js",
   "scripts": {
@@ -99,6 +100,10 @@
         "width": 540,
         "height": 380
       }
+    },
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
     }
   }
 }
