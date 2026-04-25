@@ -228,14 +228,10 @@ export default function Page() {
       {/* ── Login ── */}
       {state === 'login' && (
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:12, padding:'20px 16px' }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 12,
-            background: C.accentLo,
-            border: `1px solid rgba(217,119,87,0.2)`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <span style={{ fontSize: 20, fontWeight: 800, color: C.accent, lineHeight: 1 }}>C</span>
-          </div>
+          <img
+            src={MASCOT_B64} alt="Claude"
+            style={{ width: 40, height: 40, imageRendering: 'pixelated', borderRadius: 10 }}
+          />
           <div style={{ textAlign: 'center' }}>
             <p style={{ fontSize: 12, fontWeight: 600, color: C.t1, margin: 0 }}>Sign in to Claude</p>
             <p style={{ fontSize: 11, color: C.t3, marginTop: 3 }}>to see your usage</p>
