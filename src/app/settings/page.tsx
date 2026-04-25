@@ -171,23 +171,18 @@ function TabNotifications({ s, update }: { s: AppSettings; update: (p: Partial<A
 }
 
 function TabAccount() {
-  const [email, setEmail] = useState<string | null>(null);
+  const [info, setInfo] = useState<{ email: string | null; planName: string | null }>({ email: null, planName: null });
 
   useEffect(() => {
-    window.electronSettings?.getAccountEmail().then(setEmail).catch(() => {});
+    window.electronSettings?.getAccountInfo().then(setInfo).catch(() => {});
   }, []);
 
   return (
     <div>
       <Group title="Account">
-        <Row label="Email" sublabel="Signed-in Claude account" last>
-          <span style={{
-            fontSize: 12, color: '#a1a1aa', fontVariantNumeric: 'tabular-nums',
-            maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-          }}>
-            {email ?? '—'}
-          </span>
-        </Row>
+        <InfoRow label="Auth method" value="Claude AI" />
+        <InfoRow label="Email"       value={info.email ?? '—'} mono />
+        <InfoRow label="Plan"        value={info.planName ?? '—'} last />
       </Group>
       <Group title="Session">
         <Row label="Sign out" sublabel="Clear your session and disconnect" last>
@@ -208,6 +203,25 @@ function TabAccount() {
           </button>
         </Row>
       </Group>
+    </div>
+  );
+}
+
+function InfoRow({ label, value, mono, last }: { label: string; value: string; mono?: boolean; last?: boolean }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '10px 16px',
+      borderBottom: last ? 'none' : '1px solid rgba(255,255,255,0.05)',
+    }}>
+      <span style={{ fontSize: 13, color: '#a1a1aa' }}>{label}</span>
+      <span style={{
+        fontSize: 13, color: '#f4f4f5',
+        fontFamily: mono ? 'monospace' : 'inherit',
+        maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+      }}>
+        {value}
+      </span>
     </div>
   );
 }

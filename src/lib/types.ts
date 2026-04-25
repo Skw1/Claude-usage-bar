@@ -53,7 +53,7 @@ declare global {
       on: (channel: string, cb: (...args: unknown[]) => void) => () => void;
     };
     electronSettings: {
-      getAccountEmail: () => Promise<string | null>;
+      getAccountInfo: () => Promise<{ email: string | null; planName: string | null }>;
       getSettings:  () => Promise<AppSettings>;
       saveSettings: (partial: Partial<AppSettings>) => Promise<AppSettings>;
       close:        () => void;
