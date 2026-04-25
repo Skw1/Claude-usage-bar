@@ -289,6 +289,11 @@ export default function Page() {
             </div>
           )}
 
+          {/* Context warning */}
+          {data.sessionPercent !== null && data.sessionPercent >= 80 && (
+            <ContextWarning pct={data.sessionPercent} reset={data.sessionResetTime} />
+          )}
+
           {/* Footer */}
           <div style={{ height: 1, background: C.divider }} />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -315,6 +320,30 @@ export default function Page() {
         button:hover { opacity: .8 !important; }
         ::-webkit-scrollbar { display: none; }
       `}</style>
+    </div>
+  );
+}
+
+function ContextWarning({ pct, reset }: { pct: number; reset: string | null }) {
+  const remaining = Math.round(100 - pct);
+  const isCritical = remaining <= 5;
+  const color = isCritical ? C.red : C.orange;
+  return (
+    <div style={{
+      borderRadius: 8,
+      background: isCritical ? 'rgba(239,68,68,0.08)' : 'rgba(245,158,11,0.08)',
+      border: `1px solid ${isCritical ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)'}`,
+      padding: '7px 10px',
+      display: 'flex', flexDirection: 'column', gap: 3,
+    }}>
+      <span style={{ fontSize: 10, fontWeight: 600, color, lineHeight: 1.4 }}>
+        {remaining}% of session remaining{isCritical ? ' — almost at limit!' : '.'}
+      </span>
+      {reset && (
+        <span style={{ fontSize: 9, color: C.t3 }}>
+          Resets {reset}
+        </span>
+      )}
     </div>
   );
 }
