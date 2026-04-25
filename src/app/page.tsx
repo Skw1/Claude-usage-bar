@@ -337,13 +337,11 @@ function ContextWarning({ pct, reset }: { pct: number; reset: string | null }) {
       display: 'flex', flexDirection: 'column', gap: 3,
     }}>
       <span style={{ fontSize: 10, fontWeight: 600, color, lineHeight: 1.4 }}>
-        {remaining}% of session remaining{isCritical ? ' — almost at limit!' : '.'}
+        {remaining}% of context remaining until auto-compact.
       </span>
-      {reset && (
-        <span style={{ fontSize: 9, color: C.t3 }}>
-          Resets {reset}
-        </span>
-      )}
+      <span style={{ fontSize: 9, color: C.t3, lineHeight: 1.4 }}>
+        {reset ? `Resets ${reset}.` : 'Session limit approaching.'}
+      </span>
     </div>
   );
 }
